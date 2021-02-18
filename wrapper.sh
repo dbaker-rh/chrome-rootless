@@ -3,14 +3,19 @@
 # Hackery ahead -- this is crude, but gets chrome operational for the
 # time being.  We can pass in the xauth file more elegantly, I'm sure.
 #
-# We have $XAUTHORITY passed in, which is a *READ ONLY* copy of
-# our X tokens.  Copy this to a different, local file with read/write
-# and Chrome can use it.
+# We have $XAUTHORITY passed in, which is either a copy of our original,
+# or perhaps a READ ONLY copy so we can't make edits to the file on the
+# underlying host.
 #
+
+echo Running as
+id -a
+
+echo Incoming, XAUTHORITY is $XAUTHORITY
+ls -l $XAUTHORITY
+
+cp $XAUTHORITY $NEWXAUTH
 export NEWXAUTH=$( mktemp )
-xauth nlist > /tmp/nlist
-export XAUTHORITY=$NEWXAUTH
-xauth nmerge /tmp/nlist
 
 
 # Hackery ahead -- we skip the first launch configuration options for
